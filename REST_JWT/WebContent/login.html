@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <title>Redux basic example</title>
+    <script src="js/redux.min.js"></script>
+	<script src="js/rest.js"></script>
+  </head>
+  <body>
+    <div>
+      <p>
+       <table border="0"> <tr><td>USER:</td><td><input type="text"></td><td>PASSWORD:</td><td><input type="password"></td></tr><tr><td></td><td></td><td></td><td></td></tr></table>
+       <button id="login" name="login">LOGIN</button>
+       <button id="onLogin" name="onLogin">ON LOGIN</button>
+       <label id="value"></label>
+      </p>
+    </div>
+    
+	
+<script>
+      let api = new RestApi(300, 400);  
+        
+      function login(){
+    	api.login();
+    	alert('llamando funcion login');
+    	return true  
+      }  
+      
+      function onLogin(){
+    	  alert('OnLogin');
+    	  if (typeof(Storage) !== "undefined") {
+ 		   alert('hay storage');
+ 		   localStorage.setItem("accessToken", "123123908");
+		  } else {
+    		alert('NO hay storage');
+		   }		
+    	  return true
+      }
+      
+      
+        
+      function counter(state, action) {
+        if (typeof state === 'undefined') {
+          return 0
+        }
+        switch (action.type) {
+          case 'INCREMENT':
+            return state + 1
+          case 'DECREMENT':
+            return state - 1
+          case 'LOGIN':
+        	  login();
+        	  alert('login');
+              return 'LOGIN EXIT!!'
+          case 'ONLOGIN':
+          	  onLogin();
+              return 'ONLOGIN!!'
+          default:
+            return state
+        }
+      }
+      
+      
+      
+      var store = Redux.createStore(counter)
+      
+      var valueEl = document.getElementById('value')
+      
+      function render() {
+        valueEl.innerHTML = store.getState().toString()
+      }
+      
+      
+      render()
+      
+      store.subscribe(render)
+      
+      
+      
+      
+      document.getElementById('onLogin')
+        .addEventListener('click', function () {
+       	  setTimeout(function () {store.dispatch({ type: 'ONLOGIN' });},3000);
+      })
+      
+      
+      document.getElementById('login')
+        .addEventListener('click', function () {
+          store.dispatch({ type: 'LOGIN' })
+        })
+        
+      document.getElementById('decrement')
+        .addEventListener('click', function () {
+          store.dispatch({ type: 'DECREMENT' })
+        })
+        
+      document.getElementById('incrementIfOdd')
+        .addEventListener('click', function () {
+          if (store.getState() % 2 !== 0) {
+            store.dispatch({ type: 'INCREMENT' })
+          }
+        })
+        
+      document.getElementById('incrementAsync')
+        .addEventListener('click', function () {
+          setTimeout(function () {
+            store.dispatch({ type: 'INCREMENT' })
+          }, 1000)
+        })
+        
+        
+  
+    </script>
+    
+   </body>
+ </html>   
